@@ -160,46 +160,56 @@ const Navbar = () => {
           src={assets.menu_icon}
           className="w-6 cursor-pointer sm:hidden"
           alt="Menu"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          onClick={() => setIsMenuOpen(true)}
         />
       </div>
 
-      {/* Mobile Menu Drawer */}
+      {/* Overlay */}
       {isMenuOpen && (
-        <div className="absolute top-16 left-0 w-full bg-white shadow-lg sm:hidden z-50">
-          <ul className="flex flex-col items-center text-gray-700 text-sm py-4">
-            {["/", "/collection", "/about", "/contact"].map((path, i) => {
-              const labels = ["HOME", "COLLECTION", "ABOUT", "CONTACT"];
-              return (
-                <NavLink
-                  key={path}
-                  className={({ isActive }) =>
-                    `w-full text-center py-2 ${
-                      isActive ? "bg-gray-200 font-semibold" : ""
-                    }`
-                  }
-                  to={path}
-                  onClick={() => setIsMenuOpen(false)} // close after click
-                >
-                  {labels[i]}
-                </NavLink>
-              );
-            })}
-          </ul>
-
-          {/* Mobile Icons */}
-          <div className="flex justify-center gap-6 py-3 border-t">
-            <img src={assets.search_icon} className="w-5 cursor-pointer" alt="Search" />
-            <img src={assets.profile_icon} className="w-5 cursor-pointer" alt="Profile" />
-            <Link to="/cart" className="relative">
-              <img src={assets.cart_icon} className="w-5" alt="Cart" />
-              <p className="absolute -top-1 -right-2 w-4 text-center leading-4 bg-black text-white aspect-square rounded-full text-[8px] font-semibold">
-                10
-              </p>
-            </Link>
-          </div>
-        </div>
+        <div
+          className="fixed inset-0 bg-black bg-opacity-40 sm:hidden z-40"
+          onClick={() => setIsMenuOpen(false)}
+        ></div>
       )}
+
+      {/* Sidebar Menu */}
+      <div
+        className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform ${
+          isMenuOpen ? "translate-x-0" : "-translate-x-full"
+        } transition-transform duration-300 z-50`}
+      >
+        {/* Close Button */}
+        <div className="flex justify-between items-center p-4 border-b">
+          <img src={assets.logo} alt="Logo" className="w-28" />
+          <button
+            onClick={() => setIsMenuOpen(false)}
+            className="text-xl font-bold"
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Sidebar Links */}
+        <ul className="flex flex-col text-gray-700 text-base">
+          {["/", "/collection", "/about", "/contact"].map((path, i) => {
+            const labels = ["HOME", "COLLECTION", "ABOUT", "CONTACT"];
+            return (
+              <NavLink
+                key={path}
+                className={({ isActive }) =>
+                  `px-6 py-4 border-b ${
+                    isActive ? "bg-gray-100 font-semibold" : "hover:bg-gray-50"
+                  }`
+                }
+                to={path}
+                onClick={() => setIsMenuOpen(false)} // close sidebar on click
+              >
+                {labels[i]}
+              </NavLink>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 };
