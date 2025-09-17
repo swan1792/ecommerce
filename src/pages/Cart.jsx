@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { ShopContext } from "../context/ShopContext";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import RelatedProducts from "../components/RelatedProducts";
 import { assets } from "../assets/assets";
 
@@ -31,33 +31,33 @@ const Cart = () => {
     );
   }
 
-  // Collect related products: any product that matches category/subCategory of items in cart
-  const cartCategories = cart.map((item) => {
-    const product = products.find((p) => p._id === item.productId);
-    return product ? { category: product.category, subCategory: product.subCategory } : null;
-  }).filter(Boolean);
+  const cartCategories = cart
+    .map((item) => {
+      const product = products.find((p) => p._id === item.productId);
+      return product
+        ? { category: product.category, subCategory: product.subCategory }
+        : null;
+    })
+    .filter(Boolean);
 
-  // Flatten all related products, exclude items already in cart
-  const relatedProducts = products.filter((p) => {
-    const inCart = cart.find(item => item.productId === p._id);
-    const matches = cartCategories.some(
-      (c) => c.category === p.category && c.subCategory === p.subCategory
-    );
-    return !inCart && matches;
-  }).slice(0, 8); // Limit to 8 products
+  const relatedProducts = products
+    .filter((p) => {
+      const inCart = cart.find((item) => item.productId === p._id);
+      const matches = cartCategories.some(
+        (c) => c.category === p.category && c.subCategory === p.subCategory
+      );
+      return !inCart && matches;
+    })
+    .slice(0, 8);
 
   return (
     <div className="min-h-screen px-4 md:px-16 py-10 bg-gray-50">
-      {/* <h2 className="text-3xl font-bold mb-8">Shopping Cart</h2> */}
-      {/* Your Cart */}
-      <div className='flex justify-center items-center gap-2 p-5'>
-        <p className='text-xl font-semibold prata-regular'>Your</p>
-        <p className='text-xl font-semibold prata-regular'>Cart</p>
-        <p className='w-8 md:w-11 h-[3px] bg-[#414141]'></p>
+      {/* Cart Header */}
+      <div className="flex justify-center items-center gap-2 p-5">
+        <p className="text-xl font-semibold">Your</p>
+        <p className="text-xl font-semibold">Cart</p>
+        <p className="w-8 md:w-11 h-[3px] bg-[#414141]"></p>
       </div>
-
-
-
 
       <div className="flex flex-col md:flex-row gap-8">
         {/* Cart Items */}
@@ -106,14 +106,6 @@ const Cart = () => {
                 </div>
 
                 {/* Remove Item */}
-                {/* <button
-                  onClick={() => removeItem(item.productId, item.size)}
-                  className="ml-4 w-16 transition"
-                >
-                  <img src={assets.bin_icon} alt="Remove Icon"/>
-                </button> */}
-
-                {/* Remove Item */}
                 <button
                   onClick={() => removeItem(item.productId, item.size)}
                   className="ml-4 w-10 h-10 flex items-center justify-center rounded-full 
@@ -154,15 +146,20 @@ const Cart = () => {
               {getTotal()}
             </span>
           </div>
-          {/* <button className="w-full py-3 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition">
-            Proceed to Checkout
-          </button> */}
           <Link to="/placeOrder">
             <button className="w-full py-3 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition">
               Proceed to Checkout
-            </button></Link>
+            </button>
+          </Link>
         </div>
       </div>
+
+      {/* Related Products */}
+      {relatedProducts.length > 0 && (
+        <div className="p-5">
+          <RelatedProducts currentProduct={null} />
+        </div>
+      )}
     </div>
   );
 };

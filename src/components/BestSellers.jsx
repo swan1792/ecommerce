@@ -6,7 +6,7 @@ import ProductCart from './ProductCart'
 const BestSellers = ({ text1, text2 }) => {
     const { products } = useContext(ShopContext)
 
-    const bestProducts = products.filter(p => p.bestseller == true);
+    const bestProducts = products.filter(p => p.bestSeller == true);
 
     return (
         <div className='p-10'>
